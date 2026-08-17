@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="安全日报">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2563eb">
+<meta name="description" content="普洱移动/铁塔维护项目部 · 安全日报填报、历史记录、月度统计">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>安全日报 · 普洱维护项目部</title>
+<style>
+:root {
+  --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #eff6ff;
+  --danger: #dc2626; --danger-light: #fef2f2;
+  --success: #16a34a; --success-light: #f0fdf4;
+  --warning: #f59e0b; --warning-light: #fffbeb;
+  --tower: #ea580c; --tower-dark: #c2410c; --tower-light: #fff7ed;
+  --bg: #f1f5f9; --bg-soft: #f8fafc; --card: #fff;
+  --text: #0f172a; --text2: #64748b; --text3: #94a3b8;
+  --border: #e2e8f0; --border2: #f1f5f9;
+  --r: 12px; --r2: 8px;
+  --sh: 0 1px 3px rgba(15,23,42,.08);
+  --sh2: 0 4px 12px rgba(15,23,42,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{font-size:16px}
+svg{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
+.app{max-width:840px;margin:0 auto;padding:10px 10px 30px}
+
+/* 项目切换 */
+.proj{display:flex;gap:5px;background:var(--card);border-radius:var(--r);padding:4px;box-shadow:var(--sh2);margin-bottom:10px}
+.proj-tab{flex:1;border:none;background:transparent;padding:13px 6px;font-size:.86rem;font-weight:600;color:var(--text2);border-radius:var(--r2);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;min-height:46px;transition:all .2s}
+.proj-tab svg{width:17px;height:17px}
+.proj-tab.on.m{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.3)}
+.proj-tab.on.t{background:var(--tower);color:#fff;box-shadow:0 2px 8px rgba(234,88,12,.3)}
+.proj-tab .ct{font-size:.7rem;padding:1px 6px;border-radius:8px;background:rgba(0,0,0,.08)}
+.proj-tab.on .ct{background:rgba(255,255,255,.3)}
+
+/* 头部 */
+.head{color:#fff;border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh2);margin-bottom:10px;position:relative;overflow:hidden}
+.head.m{background:linear-gradient(135deg,#2563eb,#3b82f6)}
+.head.t{background:linear-gradient(135deg,#ea580c,#f97316)}
+.head::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%}
+.head h1{font-size:1.15rem;font-weight:700;position:relative;z-index:1}
+.head .sub{font-size:.78rem;opacity:.85;margin-top:4px;position:relative;z-index:1}
+.head-btns{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;position:relative;z-index:1}
+
+/* 按钮 */
+.btn{border:none;border-radius:var(--r2);padding:9px 14px;font-size:.83rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s;min-height:40px;font-family:inherit;white-space:nowrap}
+.btn svg{width:15px;height:15px}
+.btn-w{background:rgba(255,255,255,.22);color:#fff}
+.btn-w:hover{background:rgba(255,255,255,.35)}
+.btn-p{background:var(--primary);color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.2)}
+.btn-p:hover{background:var(--primary-dark)}
+.btn-t{background:var(--tower);color:#fff;box-shadow:0 2px 6px rgba(234,88,12,.2)}
+.btn-t:hover{background:var(--tower-dark)}
+.btn-o{background:var(--card);color:var(--primary);border:1.5px solid var(--primary)}
+.btn-o:hover{background:var(--primary-light)}
+.btn-o.t{color:var(--tower);border-color:var(--tower)}
+.btn-o.t:hover{background:var(--tower-light)}
+.btn-d{background:var(--card);color:var(--danger);border:1.5px solid var(--danger)}
+.btn-d:hover{background:var(--danger-light)}
+.btn-g{background:transparent;color:var(--text2)}
+.btn-g:hover{background:var(--bg)}
+.btn-s{padding:6px 10px;font-size:.76rem;min-height:34px;border-radius:6px}
+
+/* 今天要处理 - 已移除 */
+
+/* Tab */
+.tabs{display:flex;gap:4px;background:var(--card);border-radius:var(--r);padding:4px;box-shadow:var(--sh2);margin-bottom:10px}
+.tab{flex:1;border:none;background:transparent;padding:12px 6px;font-size:.84rem;font-weight:600;color:var(--text2);border-radius:var(--r2);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;transition:all .2s}
+.tab svg{width:16px;height:16px}
+.tab.on.m{background:var(--primary);color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.2)}
+.tab.on.t{background:var(--tower);color:#fff;box-shadow:0 2px 6px rgba(234,88,12,.2)}
+.tc{display:none}
+.tc.on{display:block;animation:fi .2s}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
+
+/* 卡片 */
+.card{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--sh2);margin-bottom:10px}
+.ctitle{font-size:.95rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px;padding-bottom:10px;border-bottom:2px solid var(--border2)}
+.ctitle svg{width:17px;height:17px;color:var(--primary)}
+.ctitle.t svg{color:var(--tower)}
+.ctitle .badge{margin-left:auto;font-size:.7rem;font-weight:600;padding:2px 9px;border-radius:10px;background:var(--primary-light);color:var(--primary)}
+
+/* 表单 */
+.fr{margin-bottom:12px}
+.fr:last-child{margin-bottom:0}
+.fl{display:block;font-size:.8rem;color:var(--text2);margin-bottom:5px;font-weight:600}
+.fl .req{color:var(--danger)}
+.fi,.fs,.fta{width:100%;border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 12px;font-size:16px;font-family:inherit;background:var(--card);color:var(--text);transition:border-color .15s}
+.fi:focus,.fs:focus,.fta:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.fta{resize:vertical;min-height:68px;line-height:1.5}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* 固定班组数 */
+.tf{width:100%;border:1.5px solid var(--border);border-radius:var(--r2);padding:11px 12px;font-size:16px;font-family:inherit;background:var(--bg);color:var(--text);font-weight:700;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px;min-height:46px}
+.tf .u{font-size:.76rem;font-weight:400;color:var(--text2)}
+
+/* 章节标题 */
+.st{font-size:.85rem;font-weight:700;color:var(--primary);margin:16px 0 8px;padding:8px 12px;background:var(--primary-light);border-radius:var(--r2);display:flex;align-items:center;gap:6px}
+.st svg{width:16px;height:16px}
+.st:first-child{margin-top:0}
+.st.t{color:var(--tower);background:var(--tower-light)}
+
+/* 统计卡片 - 强制横排 */
+.sg{display:flex;gap:6px;margin:10px 0}
+.si{flex:1 1 0;min-width:0;text-align:center;padding:11px 3px;border-radius:var(--r2);background:var(--bg-soft);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;gap:2px}
+.si .n{font-size:1.2rem;font-weight:800;color:var(--primary);line-height:1.2}
+.si.t .n{color:var(--tower)}
+.si .l{font-size:.68rem;color:var(--text2);font-weight:500;line-height:1.3}
+.si.d{background:var(--danger-light);border-color:#fecaca}
+.si.d .n{color:var(--danger)}
+.si.s{background:var(--success-light);border-color:#bbf7d0}
+.si.s .n{color:var(--success)}
+
+/* 高危区县 */
+.har{display:grid;grid-template-columns:88px 1fr 1fr 1fr;gap:5px;align-items:center;margin-bottom:6px}
+.hn{font-size:.8rem;font-weight:600;padding:0 3px}
+.har .fi{padding:8px 5px;font-size:.84rem;text-align:center}
+.hsb{margin-top:6px;padding:9px 12px;background:var(--bg);border-radius:var(--r2);border:1px solid var(--border)}
+.hsr{display:flex;justify-content:space-between;align-items:center;font-size:.85rem}
+.hsr>span:first-child{font-weight:700}
+.hsr .nums{font-size:.83rem;color:var(--text2)}
+.hsr .nums strong{font-size:.95rem}
+
+/* 历史列表 */
+.hl{position:relative;margin-bottom:8px;border-radius:var(--r);overflow:hidden;box-shadow:var(--sh)}
+.del-btn{position:absolute;top:0;right:0;width:76px;height:100%;background:var(--danger);color:#fff;border:none;font-size:.8rem;font-weight:600;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:inherit;z-index:0}
+.del-btn svg{width:19px;height:19px}
+.hc{position:relative;background:var(--card);transform:translateX(0);transition:transform .25s;z-index:1;border-left:4px solid var(--border);padding:14px 16px;cursor:pointer}
+.hc.drag{transition:none}
+.hl.open .hc{transform:translateX(-76px)}
+.hl .hc.m{border-left-color:var(--danger)}
+.hl .hc.p{border-left-color:var(--warning)}
+.hl .hc.c{border-left-color:var(--success)}
+.htop{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.hdate{font-size:.95rem;font-weight:700}
+.hst{font-size:.7rem;padding:2px 9px;border-radius:10px;font-weight:600}
+.hst.m{background:var(--danger-light);color:var(--danger)}
+.hst.p{background:var(--warning-light);color:#92400e}
+.hst.c{background:var(--success-light);color:var(--success)}
+.htags{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+.htag{font-size:.72rem;font-weight:600;padding:2px 7px;border-radius:5px;white-space:nowrap}
+.htag.ok{background:var(--success-light);color:var(--success)}
+.htag.bad{background:var(--danger-light);color:var(--danger)}
+.hact{display:flex;gap:5px;margin-top:8px}
+
+/* 筛选条 */
+.fb{background:var(--card);border-radius:var(--r);padding:12px 14px;box-shadow:var(--sh2);margin-bottom:10px}
+.fr2{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap}
+.fr2:last-child{margin-bottom:0}
+.flbl{font-size:.72rem;color:var(--text3);font-weight:700;white-space:nowrap}
+.finp{padding:7px 9px;font-size:.83rem;border:1.5px solid var(--border);border-radius:var(--r2);font-family:inherit;flex:1;min-width:0;background:var(--card);color:var(--text)}
+.finp:focus{outline:none;border-color:var(--primary)}
+.fdg{display:flex;align-items:center;gap:4px;flex:1;min-width:0}
+.fsep{color:var(--text3);font-size:.78rem;flex-shrink:0}
+.fsg{display:flex;gap:5px;flex:1}
+.fchip{border:1.5px solid var(--border);background:var(--card);color:var(--text2);padding:5px 12px;border-radius:18px;font-size:.76rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.fchip:hover{border-color:var(--primary);color:var(--primary)}
+.fchip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.fchip.on.t{background:var(--tower);border-color:var(--tower)}
+
+/* 区县表格 */
+.at{width:100%;border-collapse:collapse;font-size:.82rem;background:var(--card);border-radius:var(--r2);overflow:hidden}
+.at th,.at td{padding:9px 5px;text-align:center;border-bottom:1px solid var(--border2)}
+.at th{background:var(--bg);font-weight:700;color:var(--text2);font-size:.74rem}
+.at td.an{text-align:left;font-weight:600;padding-left:12px}
+.at td.mn{color:var(--danger);font-weight:700}
+.at td.rn{color:var(--success);font-weight:700}
+.at tr:last-child td{border-bottom:none}
+.at tfoot td{font-weight:800;background:var(--bg);border-top:2px solid var(--border)}
+
+/* 空状态 */
+.empty{text-align:center;padding:30px 20px;color:var(--text3)}
+.empty svg{width:42px;height:42px;opacity:.4;margin-bottom:10px}
+.empty p{font-size:.85rem}
+.empty .btn{margin-top:10px}
+
+/* 模态框 - 强制隐藏 */
+.mask{display:none!important;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);z-index:1000;padding:16px;align-items:center;justify-content:center;visibility:hidden;opacity:0}
+.mask.show{display:flex!important;visibility:visible;opacity:1;transition:opacity .2s}
+.modal{background:var(--card);border-radius:14px;padding:22px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.modal h3{font-size:1rem;font-weight:700;margin-bottom:14px}
+.mtext{font-size:.86rem;color:var(--text2);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-break:break-all}
+.mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.ptext{background:var(--bg);border-radius:var(--r2);padding:13px;font-size:.84rem;line-height:1.8;white-space:pre-wrap;word-break:break-all;max-height:50vh;overflow-y:auto;font-family:-apple-system,"SF Mono",Consolas,monospace}
+
+/* Toast */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-100px);background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--r2);font-size:.83rem;z-index:2000;transition:transform .3s;box-shadow:0 4px 12px rgba(0,0,0,.2);max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast .ta{margin-left:8px;color:#60a5fa;font-weight:700;cursor:pointer}
+
+/* 备份提示 */
+.bh{background:var(--warning-light);color:#92400e;padding:9px 12px;border-radius:var(--r2);font-size:.8rem;margin-bottom:10px;display:flex;align-items:center;gap:6px;border:1px solid var(--warning)}
+.bh svg{width:15px;height:15px}
+
+/* 折线图 */
+.cw{position:relative;min-width:300px}
+.csvg{display:block;width:100%;height:auto}
+.cal{stroke:var(--border);stroke-width:1}
+.cgl{stroke:var(--border);stroke-width:.5;stroke-dasharray:3 3;opacity:.6}
+.calt{fill:var(--text2);font-size:11px;font-family:-apple-system,sans-serif}
+.calty{text-anchor:end}
+.clo{stroke:var(--primary);stroke-width:2;fill:none}
+.cli{stroke:var(--success);stroke-width:2;fill:none}
+.clh{stroke:var(--danger);stroke-width:2;fill:none}
+.cdo{fill:var(--primary)}
+.cdi{fill:var(--success)}
+.cdh{fill:var(--danger)}
+.cao{fill:var(--primary);opacity:.08}
+.cleg{display:flex;gap:14px;justify-content:center;margin-top:10px;flex-wrap:wrap}
+.clegi{display:flex;align-items:center;gap:5px;font-size:.76rem;color:var(--text2)}
+.clegd{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.cxl{fill:var(--text2);font-size:10px;font-family:-apple-system,sans-serif;text-anchor:middle}
+
+/* 详情 */
+.ds{margin-bottom:14px}
+.ds:last-child{margin-bottom:0}
+.dst{font-size:.82rem;font-weight:700;color:var(--primary);margin-bottom:7px;padding:6px 10px;background:var(--primary-light);border-radius:6px}
+.dst.t{color:var(--tower);background:var(--tower-light)}
+.dr{display:flex;justify-content:space-between;font-size:.84rem;padding:3px 0}
+.dr .l{color:var(--text2)}
+.dr .v{font-weight:600}
+.dn{font-size:.8rem;color:var(--text);background:var(--bg);padding:8px 10px;border-radius:6px;margin-top:6px;line-height:1.5}
+
+/* 移动端 */
+@media(max-width:600px){
+  .app{padding:8px 8px 24px}
+  .head{padding:16px 18px}
+  .head h1{font-size:1.05rem}
+  .card{padding:14px}
+  .g2{grid-template-columns:1fr}
+  .g3{grid-template-columns:1fr 1fr}
+  .si .n{font-size:1.05rem}
+  .si .l{font-size:.62rem}
+  .tab{font-size:.78rem;padding:11px 4px}
+  .proj-tab{font-size:.8rem;padding:11px 4px}
+  .btn{padding:8px 11px;font-size:.8rem}
+  .head-btns .btn{flex:1;min-width:0;justify-content:center}
+  .modal{padding:18px;margin:8px}
+  .har{grid-template-columns:68px 1fr 1fr 1fr;gap:3px}
+  .hn{font-size:.73rem}
+  .har .fi{font-size:.78rem;padding:7px 3px}
+  .finp{font-size:.8rem;padding:6px 7px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- 项目切换 -->
+  <div class="proj">
+    <button class="proj-tab on m" id="pt-mobile" onclick="switchProject('mobile')">
+      <svg viewBox="0 0 24 24"><path d="M2 16.1A5 5 0 0 1 5.9 13M2 12a5 5 0 0 1 5-5M19.5 12.5a5 5 0 1 0-5-5M22 16.1A5 5 0 0 0 18.1 13"/><circle cx="12" cy="12" r="3"/></svg>
+      普洱移动维护<span class="ct">37组</span>
+    </button>
+    <button class="proj-tab" id="pt-tower" onclick="switchProject('tower')">
+      <svg viewBox="0 0 24 24"><path d="M12 2L4 22h16L12 2z"/><line x1="12" y1="8" x2="12" y2="14"/></svg>
+      普洱铁塔维护<span class="ct">34组</span>
+    </button>
+  </div>
+
+  <!-- 头部 -->
+  <div class="head m" id="head">
+    <h1 id="head-title">普洱移动维护项目部 · 安全日报</h1>
+    <div class="sub">每日出工·收工·高危·通报记录</div>
+    <div class="head-btns">
+      <button class="btn btn-w" onclick="exportJSON()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出备份
+      </button>
+      <button class="btn btn-w" onclick="document.getElementById('import-file').click()">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>导入恢复
+      </button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+  </div>
+
+  <!-- Tab -->
+  <div class="tabs">
+    <button class="tab on m" data-tab="fill" onclick="switchTab('fill')">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>填报日报
+    </button>
+    <button class="tab" data-tab="history" onclick="switchTab('history')">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 4-6"/></svg>历史日报
+    </button>
+    <button class="tab" data-tab="stats" onclick="switchTab('stats')">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 4-6"/></svg>月度统计
+    </button>
+  </div>
+
+  <!-- 填报日报 -->
+  <div class="tc on" id="tc-fill">
+    <div class="card">
+      <div class="ctitle" id="ct-wrap">
+        <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <span id="form-title">新建日报</span>
+        <span class="badge" id="form-badge">新建</span>
+      </div>
+
+      <div class="fr">
+        <label class="fl">日期 <span class="req">*</span></label>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="date" class="fi" id="f-date" style="flex:1">
+          <button class="btn btn-o btn-s" onclick="setDateQuick(0)">今天</button>
+          <button class="btn btn-o btn-s" onclick="setDateQuick(1)">昨天</button>
+        </div>
+      </div>
+
+      <div class="st" id="sec-out"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>出工</div>
+      <div class="g3" style="margin-bottom:8px">
+        <div><label class="fl">共（组）</label><div class="tf" id="f-out-total"><span class="tn">37</span><span class="u">组</span></div></div>
+        <div><label class="fl">出工（组）</label><input type="number" class="fi" id="f-out-dispatch" oninput="calcStats()"></div>
+        <div><label class="fl">已报（组）</label><input type="number" class="fi" id="f-out-reported" oninput="calcStats()"></div>
+      </div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><label class="fl">未报（组）</label><input type="number" class="fi" id="f-out-missing" placeholder="自动" readonly style="background:var(--bg)"></div>
+        <div><label class="fl">原因</label><input type="text" class="fi" id="f-out-reason" placeholder="未报原因"></div>
+      </div>
+
+      <div class="st" id="sec-in"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg>收工</div>
+      <div class="g3" style="margin-bottom:8px">
+        <div><label class="fl">共（组）</label><div class="tf" id="f-in-total"><span class="tn">37</span><span class="u">组</span></div></div>
+        <div><label class="fl">出工（组）</label><input type="number" class="fi" id="f-in-dispatch" oninput="calcStats()"></div>
+        <div><label class="fl">收工（组）</label><input type="number" class="fi" id="f-in-reported" oninput="calcStats()"></div>
+      </div>
+      <div class="g2" style="margin-bottom:8px">
+        <div><label class="fl">未报（组）</label><input type="number" class="fi" id="f-in-missing" placeholder="自动" readonly style="background:var(--bg)"></div>
+        <div><label class="fl">原因</label><input type="text" class="fi" id="f-in-reason" placeholder="未报原因"></div>
+      </div>
+
+      <div class="st" id="sec-high"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>高危 <span style="font-weight:400;font-size:.76rem;color:var(--text2)">（按区县）</span></div>
+      <div id="high-areas-list"></div>
+      <div class="hsb" id="hsb" style="display:none">
+        <div class="hsr"><span>合计</span><span class="nums">共 <strong id="hs-total">0</strong> 单 · 已报 <strong id="hs-reported" style="color:var(--success)">0</strong> · 未报 <strong id="hs-missing" style="color:var(--danger)">0</strong></span></div>
+      </div>
+
+      <div class="st" id="sec-bul"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>通报</div>
+      <div class="fr"><textarea class="fta" id="f-bulletin" placeholder="今日通报事项、安全提醒等"></textarea></div>
+
+      <div class="sg" id="sg-form" style="display:none">
+        <div class="si"><div class="n" id="sf-or">--</div><div class="l">出工上报率</div></div>
+        <div class="si d"><div class="n" id="sf-om">0</div><div class="l">出工未报</div></div>
+        <div class="si s"><div class="n" id="sf-ir">--</div><div class="l">收工上报率</div></div>
+        <div class="si d"><div class="n" id="sf-im">0</div><div class="l">收工未报</div></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+        <button class="btn btn-p" id="save-btn" onclick="saveReport()" style="flex:1;min-width:110px"><svg viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>保存日报</button>
+        <button class="btn btn-o" id="preview-btn" onclick="previewReport()"><svg viewBox="0 0 24 24"><path d="M1 12s4-8 9-8 9 8 9 8-4 8-9 8-9-8-9-8z"/><circle cx="12" cy="12" r="3"/></svg>预览</button>
+        <button class="btn btn-g" onclick="resetForm()">重置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 历史日报 -->
+  <div class="tc" id="tc-history">
+    <div id="bh-container"></div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+      <button class="btn btn-o btn-s" id="export-all-btn" onclick="exportTextAll()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>导出全部</button>
+      <button class="btn btn-d btn-s" onclick="confirmClearAll()"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>清空本部</button>
+    </div>
+    <div class="fb">
+      <div class="fr2">
+        <span class="flbl">日期</span>
+        <div class="fdg"><input type="date" class="finp" id="filter-from" onchange="renderHistory()"><span class="fsep">~</span><input type="date" class="finp" id="filter-to" onchange="renderHistory()"></div>
+      </div>
+      <div class="fr2">
+        <span class="flbl">状态</span>
+        <div class="fsg" id="fsg">
+          <button class="fchip on" data-s="all" onclick="setFilterStatus('all')">全部</button>
+          <button class="fchip" data-s="missing" onclick="setFilterStatus('missing')">待闭环</button>
+          <button class="fchip" data-s="complete" onclick="setFilterStatus('complete')">已闭环</button>
+        </div>
+        <button class="btn btn-g btn-s" onclick="clearFilter()">清除</button>
+      </div>
+    </div>
+    <div id="history-list"></div>
+  </div>
+
+  <!-- 月度统计 -->
+  <div class="tc" id="tc-stats">
+    <div class="card">
+      <div class="ctitle"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 4-6"/></svg><span>月度统计</span><span class="badge" id="stats-badge">本月</span></div>
+
+      <div class="fr" style="display:flex;gap:8px;align-items:flex-end">
+        <div style="flex:1"><label class="fl">选择月份</label><input type="month" class="fi" id="stats-month" onchange="renderStats()"></div>
+        <button class="btn btn-g btn-s" onclick="setStatsThisMonth()">本月</button>
+        <button class="btn btn-o btn-s" id="stats-export" onclick="exportStatsReport()"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>导出报表</button>
+      </div>
+
+      <div class="sg" style="margin-top:14px">
+        <div class="si"><div class="n" id="sm-or">--</div><div class="l">出工上报率</div></div>
+        <div class="si"><div class="n" id="sm-ir">--</div><div class="l">收工上报率</div></div>
+        <div class="si"><div class="n" id="sm-hr">--</div><div class="l">高危上报率</div></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="st" style="margin:0 0 8px"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>每日上报率趋势</div>
+        <div id="chart-container" style="width:100%;overflow-x:auto"></div>
+        <div id="chart-legend" class="cleg"></div>
+        <div id="chart-empty" class="empty" style="display:none;padding:20px"><p>本月暂无日报数据</p></div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="st" style="margin:0 0 8px"><svg viewBox="0 0 24 24"><path d="M9 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-4"/><rect x="9" y="3" width="6" height="8" rx="1"/></svg>月度汇总</div>
+        <div class="sg">
+          <div class="si"><div class="n" id="sm-ot">0</div><div class="l">总出工组数</div></div>
+          <div class="si"><div class="n" id="sm-it">0</div><div class="l">总收工组数</div></div>
+          <div class="si"><div class="n" id="sm-ht">0</div><div class="l">总高危单数</div></div>
+        </div>
+        <div class="sg" style="margin-top:6px">
+          <div class="si d"><div class="n" id="sm-om">0</div><div class="l">出工未报</div></div>
+          <div class="si d"><div class="n" id="sm-im">0</div><div class="l">收工未报</div></div>
+          <div class="si d"><div class="n" id="sm-hm">0</div><div class="l">高危未报</div></div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px">
+        <div class="st" style="margin:0 0 8px"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>高危工单 · 按区县统计</div>
+        <div style="overflow-x:auto"><table class="at"><thead><tr><th>区县</th><th>共(单)</th><th>已报</th><th>未报</th><th>上报率</th></tr></thead><tbody id="at-body"></tbody></table></div>
+      </div>
+
+      <div style="margin-top:12px;text-align:center;font-size:.8rem;color:var(--text2)">本月已填报 <strong id="sm-count" style="font-size:.95rem;color:var(--primary)">0</strong> 份日报</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 弹窗：预览 -->
+<div class="mask" id="m-preview" onclick="if(event.target===this)closeModal('m-preview')">
+  <div class="modal">
+    <h3 id="pv-title">日报预览</h3>
+    <div class="ptext" id="pv-body"></div>
+    <div class="mact" style="margin-top:14px">
+      <button class="btn btn-g" onclick="closeModal('m-preview')">关闭</button>
+      <button class="btn btn-o" onclick="copyPreview()"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>复制</button>
+      <button class="btn btn-p" onclick="sharePreview()"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.42" y1="6.51" x2="8.59" y2="10.49"/></svg>分享</button>
+    </div>
+  </div>
+</div>
+
+<!-- 弹窗：确认 -->
+<div class="mask" id="m-confirm" onclick="if(event.target===this)closeModal('m-confirm')">
+  <div class="modal">
+    <h3 id="cf-title">确认操作</h3>
+    <div class="mtext" id="cf-text"></div>
+    <div class="mact">
+      <button class="btn btn-g" onclick="closeModal('m-confirm')">取消</button>
+      <button class="btn btn-d" id="cf-ok">确认</button>
+    </div>
+  </div>
+</div>
+
+<!-- 弹窗：详情 -->
+<div class="mask" id="m-detail" onclick="if(event.target===this)closeModal('m-detail')">
+  <div class="modal">
+    <h3 id="dt-title">日报详情</h3>
+    <div id="dt-body"></div>
+    <div class="mact" style="margin-top:14px">
+      <button class="btn btn-g" onclick="closeModal('m-detail')">关闭</button>
+      <button class="btn btn-o" id="dt-export" onclick="exportTextFromDetail()"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出</button>
+      <button class="btn btn-d" onclick="deleteFromDetail()"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>删除</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PROJECTS={
+  mobile:{key:'mobile',name:'普洱移动维护项目部',shortName:'移动',totalGroups:37,theme:'m',highAreas:['墨江移动','景东移动','思茅移动','镇沅移动']},
+  tower:{key:'tower',name:'普洱铁塔维护项目部',shortName:'铁塔',totalGroups:34,theme:'t',highAreas:['思茅铁塔','景东铁塔','景谷铁塔','镇沅铁塔','江城铁塔']}
+};
+let curProj='mobile',dataMap={mobile:[],tower:[]},editingId=null,detailId=null,filterStatus='all',confirmCb=null,toastTimer=null,deletedReport=null;
+
+const $=id=>document.getElementById(id);
+const num=v=>{const n=parseInt(v);return isNaN(n)?0:n};
+const fmtDate=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const fmtMD=s=>{if(!s)return'x月x日';const d=new Date(s+'T00:00:00');return(d.getMonth()+1)+'月'+d.getDate()+'日'};
+const fmtDisp=s=>{if(!s)return'';const t=fmtDate(new Date()),y=fmtDate(new Date(Date.now()-86400000));if(s===t)return'今天 '+s;if(s===y)return'昨天 '+s;return s};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const getReports=()=>dataMap[curProj];
+const sKey=p=>'wb_safety_report_'+p;
+
+function showToast(msg,action){
+  const t=$('toast');
+  t.className='toast';
+  t.innerHTML=action?`${msg}<span class="ta" onclick="${action}">撤销</span>`:msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),action?3500:2600);
+}
+function openModal(id){$(id).classList.add('show')}
+function closeModal(id){$(id).classList.remove('show')}
+function showConfirm(title,text,cb){
+  $('cf-title').textContent=title;$('cf-text').textContent=text;confirmCb=cb;openModal('m-confirm');
+}
+$('cf-ok').onclick=()=>{if(confirmCb)confirmCb()};
+
+// 初始化
+function init(){
+  // 注册 PWA Service Worker（离线缓存 + 可安装 + 更新检测）
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(reg=>{
+      // 发现新版本 SW → 自动更新并刷新，避免卡在旧缓存
+      reg.addEventListener('updatefound',()=>{
+        const nw=reg.installing;
+        if(!nw)return;
+        nw.addEventListener('statechange',()=>{
+          if(nw.state==='activated'&&navigator.serviceWorker.controller){
+            window.location.reload();
+          }
+        });
+      });
+    }).catch(()=>{});
+  }
+  // 数据纯本地存储：每次打开从 localStorage 自动读取历史数据
+  ['mobile','tower'].forEach(p=>{
+    const st=localStorage.getItem(sKey(p));
+    if(st){try{dataMap[p]=JSON.parse(st)}catch(e){dataMap[p]=[]}}
+    if(!Array.isArray(dataMap[p]))dataMap[p]=[];
+  });
+  $('f-date').value=fmtDate(new Date());
+  const n=new Date();
+  $('stats-month').value=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;
+  applyTheme();renderAll();calcStats();
+}
+
+function saveStore(p){localStorage.setItem(sKey(p),JSON.stringify(dataMap[p]))}
+
+// 主题
+function applyTheme(){
+  const p=PROJECTS[curProj],th=p.theme;
+  $('pt-mobile').classList.toggle('on',curProj==='mobile');
+  $('pt-tower').classList.toggle('on',curProj==='tower');
+  $('pt-mobile').classList.toggle('m',curProj==='mobile');
+  $('pt-tower').classList.toggle('t',curProj==='tower');
+  if(curProj==='tower')$('pt-tower').classList.add('t');
+  const h=$('head');h.className='head '+th;
+  $('head-title').textContent=p.name+' · 安全日报';
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('m','t');t.classList.add(th)});
+  document.querySelectorAll('.st').forEach(s=>{s.classList.remove('t');if(th==='t')s.classList.add('t')});
+  $('ct-wrap').classList.toggle('t',th==='t');
+  $('save-btn').className='btn '+(th==='t'?'btn-t':'btn-p');
+  $('preview-btn').classList.toggle('t',th==='t');
+  $('export-all-btn').classList.toggle('t',th==='t');
+  $('stats-export').classList.toggle('t',th==='t');
+  $('dt-export').classList.toggle('t',th==='t');
+  $('f-out-total').querySelector('.tn').textContent=p.totalGroups;
+  $('f-in-total').querySelector('.tn').textContent=p.totalGroups;
+  document.querySelectorAll('.fchip.on').forEach(c=>{c.classList.remove('t');if(th==='t')c.classList.add('t')});
+  renderHighAreas();
+}
+
+function switchProject(p){
+  if(p===curProj)return;
+  curProj=p;editingId=null;resetForm();applyTheme();renderAll();calcStats();
+}
+
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===n));
+  document.querySelectorAll('.tc').forEach(c=>c.classList.toggle('on',c.id==='tc-'+n));
+  if(n==='history')renderHistory();
+  if(n==='stats')renderStats();
+}
+
+function setDateQuick(a){$('f-date').value=fmtDate(new Date(Date.now()-a*86400000))}
+
+// 统计计算
+function calcStats(){
+  const od=num($('f-out-dispatch').value),or=num($('f-out-reported').value);
+  if(od>0&&or>=0){const m=Math.max(0,od-or);$('f-out-missing').value=m>0?m:''}
+  const id=num($('f-in-dispatch').value),ir=num($('f-in-reported').value);
+  if(id>0&&ir>=0){const m=Math.max(0,id-ir);$('f-in-missing').value=m>0?m:''}
+  const high=calcHigh();
+  const sg=$('sg-form');
+  if(od>0||or>0||id>0||high.total>0){
+    sg.style.display='flex';
+    $('sf-or').textContent=od>0?((or/od)*100).toFixed(0)+'%':'--';
+    $('sf-om').textContent=num($('f-out-missing').value);
+    $('sf-ir').textContent=id>0?((ir/id)*100).toFixed(0)+'%':'--';
+    $('sf-im').textContent=num($('f-in-missing').value);
+  }else sg.style.display='none';
+}
+
+// 高危区县
+function renderHighAreas(){
+  const areas=PROJECTS[curProj].highAreas,c=$('high-areas-list');
+  c.innerHTML='<div class="har" style="margin-bottom:4px"><div style="font-size:.72rem;color:var(--text3);font-weight:700">区县</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">共(单)</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">已报</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">未报</div></div>'+
+  areas.map(n=>`<div class="har" data-area="${n}"><div class="hn">${n}</div><input type="number" class="fi" placeholder="0" data-f="total" oninput="calcHigh()"><input type="number" class="fi" placeholder="0" data-f="reported" oninput="calcHigh()"><input type="number" class="fi" placeholder="0" data-f="missing" readonly style="background:var(--bg);color:var(--danger);font-weight:700"></div>`).join('');
+  calcHigh();
+}
+
+function calcHigh(){
+  let t=0,r=0,m=0;
+  document.querySelectorAll('#high-areas-list .har[data-area]').forEach(row=>{
+    const tv=num(row.querySelector('[data-f="total"]').value),rv=num(row.querySelector('[data-f="reported"]').value),mv=Math.max(0,tv-rv);
+    row.querySelector('[data-f="missing"]').value=mv>0?mv:'';t+=tv;r+=rv;m+=mv;
+  });
+  const box=$('hsb');
+  if(t>0||r>0){box.style.display='block';$('hs-total').textContent=t;$('hs-reported').textContent=r;$('hs-missing').textContent=m}
+  else box.style.display='none';
+  return{total:t,reported:r,missing:m};
+}
+
+function collectHigh(){
+  return[...document.querySelectorAll('#high-areas-list .har[data-area]')].map(row=>({name:row.dataset.area,total:num(row.querySelector('[data-f="total"]').value),reported:num(row.querySelector('[data-f="reported"]').value),missing:num(row.querySelector('[data-f="missing"]').value)}));
+}
+
+function fillHigh(areas){
+  document.querySelectorAll('#high-areas-list .har[data-area]').forEach(row=>{['total','reported','missing'].forEach(f=>row.querySelector(`[data-f="${f}"]`).value='')});
+  if(areas&&Array.isArray(areas))areas.forEach(a=>{const row=document.querySelector(`#high-areas-list .har[data-area="${a.name}"]`);if(row){row.querySelector('[data-f="total"]').value=a.total||'';row.querySelector('[data-f="reported"]').value=a.reported||'';row.querySelector('[data-f="missing"]').value=a.missing||''}});
+  calcHigh();
+}
+
+function clearHigh(){
+  document.querySelectorAll('#high-areas-list .har[data-area]').forEach(row=>{['total','reported','missing'].forEach(f=>row.querySelector(`[data-f="${f}"]`).value='')});
+  calcHigh();
+}
+
+function sumHigh(areas){
+  if(!areas||!Array.isArray(areas))return{total:0,reported:0,missing:0};
+  return areas.reduce((a,x)=>({total:a.total+(x.total||0),reported:a.reported+(x.reported||0),missing:a.missing+(x.missing||0)}),{total:0,reported:0,missing:0});
+}
+
+// 保存
+function saveReport(){
+  const date=$('f-date').value;if(!date){showToast('请选择日期');return}
+  const data={
+    id:editingId||('r-'+curProj+'-'+Date.now()),project:curProj,date:date,
+    outTotal:PROJECTS[curProj].totalGroups,outDispatch:num($('f-out-dispatch').value),outReported:num($('f-out-reported').value),outMissing:num($('f-out-missing').value),outReason:$('f-out-reason').value.trim(),
+    inTotal:PROJECTS[curProj].totalGroups,inDispatch:num($('f-in-dispatch').value),inReported:num($('f-in-reported').value),inMissing:num($('f-in-missing').value),inReason:$('f-in-reason').value.trim(),
+    highAreas:collectHigh(),bulletin:$('f-bulletin').value.trim(),
+    createdAt:editingId?(getReports().find(r=>r.id===editingId)?.createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()
+  };
+  const reports=getReports();
+  const ei=reports.findIndex(r=>r.id===data.id);
+  const sdi=reports.findIndex(r=>r.date===data.date&&r.id!==data.id);
+  if(sdi>=0){
+    showConfirm('日期重复',`已存在 ${data.date} 的日报，是否覆盖？`,()=>{reports[sdi]=data;saveStore(curProj);renderAll();resetForm();closeModal('m-confirm');showToast('日报已更新')});
+    return;
+  }
+  if(ei>=0)reports[ei]=data;else reports.push(data);
+  reports.sort((a,b)=>b.date.localeCompare(a.date));
+  saveStore(curProj);renderAll();resetForm();showToast(editingId?'日报已更新':'日报已保存');
+}
+
+function editReport(id){
+  const r=getReports().find(x=>x.id===id);if(!r)return;
+  editingId=id;
+  $('f-date').value=r.date;
+  $('f-out-dispatch').value=r.outDispatch||'';$('f-out-reported').value=r.outReported||'';$('f-out-missing').value=r.outMissing||'';$('f-out-reason').value=r.outReason||'';
+  $('f-in-dispatch').value=r.inDispatch||'';$('f-in-reported').value=r.inReported||'';$('f-in-missing').value=r.inMissing||'';$('f-in-reason').value=r.inReason||'';
+  fillHigh(r.highAreas);$('f-bulletin').value=r.bulletin||'';
+  $('form-title').textContent='编辑日报';const b=$('form-badge');b.textContent='编辑';b.style.background='var(--warning-light)';b.style.color='#92400e';
+  switchTab('fill');calcStats();window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetForm(){
+  editingId=null;
+  $('f-date').value=fmtDate(new Date());
+  ['f-out-reported','f-out-missing','f-out-reason','f-in-reported','f-in-missing','f-in-reason','f-bulletin'].forEach(id=>$(id).value='');
+  $('f-out-dispatch').value=PROJECTS[curProj].totalGroups;
+  $('f-in-dispatch').value=PROJECTS[curProj].totalGroups;
+  clearHigh();
+  $('form-title').textContent='新建日报';const b=$('form-badge');b.textContent='新建';b.style.background='';b.style.color='';
+  calcStats();
+}
+
+// 历史筛选
+function setFilterStatus(s){
+  filterStatus=s;const th=PROJECTS[curProj].theme;
+  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t');if(c.dataset.s===s){c.classList.add('on');if(th==='t')c.classList.add('t')}});
+  renderHistory();
+}
+function clearFilter(){
+  filterStatus='all';$('filter-from').value='';$('filter-to').value='';
+  const th=PROJECTS[curProj].theme;
+  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t');if(c.dataset.s==='all'){c.classList.add('on');if(th==='t')c.classList.add('t')}});
+  renderHistory();
+}
+
+// 渲染历史
+function renderHistory(){
+  const c=$('history-list');let reports=getReports();
+  const ff=$('filter-from').value,ft=$('filter-to').value;
+  let filtered=reports.filter(r=>{
+    if(ff&&r.date<ff)return false;if(ft&&r.date>ft)return false;
+    if(filterStatus!=='all'){
+      let hm=num(r.highMissing);if(r.highAreas&&Array.isArray(r.highAreas))hm=sumHigh(r.highAreas).missing;
+      const hasM=num(r.outMissing)>0||num(r.inMissing)>0||hm>0;
+      if(filterStatus==='missing'&&!hasM)return false;
+      if(filterStatus==='complete'&&hasM)return false;
+    }
+    return true;
+  });
+  if(reports.length===0){c.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><p>'+PROJECTS[curProj].name+'<br>还没有日报记录<br><br>点击「填报日报」开始填写</p></div>';return}
+  if(filtered.length===0){c.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p>没有符合筛选条件的日报</p><button class="btn btn-g btn-s" onclick="clearFilter()">清除筛选</button></div>';return}
+  reports=filtered;
+  c.innerHTML=reports.map(r=>{
+    const om=num(r.outMissing),im=num(r.inMissing);let hm=num(r.highMissing),ht=num(r.highTotal);
+    if(r.highAreas&&Array.isArray(r.highAreas)){const s=sumHigh(r.highAreas);hm=s.missing;ht=s.total}
+    let sc='c',st='已闭环';if(om>0||im>0||hm>0){sc='m';st='待闭环'}else if(!r.outDispatch&&!r.inDispatch&&!ht){sc='p';st='未填写'}
+    const outRate=r.outDispatch>0?((r.outReported/r.outDispatch)*100).toFixed(0)+'%':'--';
+    return`<div class="hl" data-id="${r.id}"><button class="del-btn" onclick="quickDelete('${r.id}')"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>删除</button><div class="hc ${sc}" data-id="${r.id}" onclick="onItemClick(event,'${r.id}')"><div class="htop"><span class="hdate">${fmtDisp(r.date)}</span><span class="hst ${sc}">${st}</span></div><div class="htags"><span class="htag ${om>0?'bad':'ok'}">出工 ${outRate}</span><span class="htag ${im>0?'bad':'ok'}">收工 ${r.inReported||0}/${r.inDispatch||0}</span>${ht>0?`<span class="htag ${hm>0?'bad':'ok'}">高危 ${hm>0?'未报'+hm:'全部已报'}</span>`:''}</div><div class="hact" onclick="event.stopPropagation()"><button class="btn btn-o btn-s" onclick="editReport('${r.id}')">编辑</button><button class="btn btn-g btn-s" onclick="previewOne('${r.id}')">预览</button></div></div></div>`;
+  }).join('');
+  bindSwipe();
+}
+
+function onItemClick(e,id){
+  if(e.currentTarget.dataset.moved==='1'){e.currentTarget.dataset.moved='0';return}
+  closeAllSwipe();showDetail(id);
+}
+
+function bindSwipe(){
+  document.querySelectorAll('.hc').forEach(el=>{
+    let sx=0,cx=0,drag=false,moved=false;const TH=40,MAX=76;
+    const start=x=>{sx=x;drag=true;moved=false;el.classList.add('drag')};
+    const move=x=>{if(!drag)return;const dx=x-sx;if(Math.abs(dx)>5)moved=true;const open=el.parentElement.classList.contains('open');let off=(open?-MAX:0)+dx;off=Math.min(0,Math.max(-MAX,off));if(dx>0&&!open)off=0;el.style.transform=`translateX(${off}px)`};
+    const end=()=>{if(!drag)return;drag=false;el.classList.remove('drag');if(!moved)return;el.dataset.moved='1';const open=el.parentElement.classList.contains('open');const dx=cx-sx;if(!open&&-dx>TH){el.parentElement.classList.add('open');closeAllSwipeExcept(el.parentElement)}else if(open&&dx>TH){el.parentElement.classList.remove('open');el.style.transform=''}else{el.style.transform=open?'translateX(-76px)':'translateX(0)'}};
+    el.addEventListener('touchstart',e=>{if(e.target.closest('button'))return;start(e.touches[0].clientX)},{passive:true});
+    el.addEventListener('touchmove',e=>{if(!drag)return;move(e.touches[0].clientX);cx=e.touches[0].clientX},{passive:true});
+    el.addEventListener('touchend',end);
+    el.addEventListener('mousedown',e=>{if(e.target.closest('button'))return;start(e.clientX);cx=e.clientX;const mm=ev=>{move(ev.clientX);cx=ev.clientX};const mu=()=>{end();document.removeEventListener('mousemove',mm);document.removeEventListener('mouseup',mu)};document.addEventListener('mousemove',mm);document.addEventListener('mouseup',mu)});
+  });
+}
+
+function closeAllSwipe(){document.querySelectorAll('.hl.open').forEach(w=>{w.classList.remove('open');const c=w.querySelector('.hc');if(c)c.style.transform=''})}
+function closeAllSwipeExcept(ex){document.querySelectorAll('.hl.open').forEach(w=>{if(w!==ex){w.classList.remove('open');const c=w.querySelector('.hc');if(c)c.style.transform=''}})}
+
+function quickDelete(id){
+  const r=getReports().find(x=>x.id===id);if(!r)return;
+  deletedReport={data:r,project:curProj,index:getReports().findIndex(x=>x.id===id)};
+  dataMap[curProj]=getReports().filter(x=>x.id!==id);saveStore(curProj);renderAll();
+  showToast(`${r.date} 已删除`,'undoDelete()');
+}
+function undoDelete(){
+  if(!deletedReport)return;const{data,project,index}=deletedReport;
+  dataMap[project].splice(index,0,data);dataMap[project].sort((a,b)=>b.date.localeCompare(a.date));saveStore(project);
+  deletedReport=null;renderAll();$('toast').classList.remove('show');showToast('已撤销删除');
+}
+
+// 详情
+function showDetail(id){
+  detailId=id;const r=getReports().find(x=>x.id===id);if(!r)return;
+  $('dt-title').textContent='日报详情 · '+r.date;
+  const outRate=r.outDispatch>0?((r.outReported/r.outDispatch)*100).toFixed(1)+'%':'--';
+  const inRate=r.inDispatch>0?((r.inReported/r.inDispatch)*100).toFixed(1)+'%':'--';
+  let ht=num(r.highTotal),hr=num(r.highReported),hm=num(r.highMissing);let ha=r.highAreas||[];
+  if(ha.length>0){const s=sumHigh(ha);ht=s.total;hr=s.reported;hm=s.missing}
+  const highRate=ht>0?((hr/ht)*100).toFixed(1)+'%':'--';
+  const tc=curProj==='tower'?' t':'';
+  $('dt-body').innerHTML=`<div class="ds"><div class="dst${tc}">出工</div><div class="dr"><span class="l">共（组）</span><span class="v">${r.outTotal||0}</span></div><div class="dr"><span class="l">出工（组）</span><span class="v">${r.outDispatch||0}</span></div><div class="dr"><span class="l">已报（组）</span><span class="v">${r.outReported||0}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${outRate}</span></div><div class="dr"><span class="l">未报（组）</span><span class="v" style="color:var(--danger)">${r.outMissing||0}</span></div>${r.outReason?`<div class="dn"><strong>原因：</strong>${esc(r.outReason)}</div>`:''}</div><div class="ds"><div class="dst${tc}">收工</div><div class="dr"><span class="l">共（组）</span><span class="v">${r.inTotal||0}</span></div><div class="dr"><span class="l">出工（组）</span><span class="v">${r.inDispatch||0}</span></div><div class="dr"><span class="l">收工（组）</span><span class="v">${r.inReported||0}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${inRate}</span></div><div class="dr"><span class="l">未报（组）</span><span class="v" style="color:var(--danger)">${r.inMissing||0}</span></div>${r.inReason?`<div class="dn"><strong>原因：</strong>${esc(r.inReason)}</div>`:''}</div><div class="ds"><div class="dst${tc}">高危（汇总）</div><div class="dr"><span class="l">共（单）</span><span class="v">${ht}</span></div><div class="dr"><span class="l">已报（单）</span><span class="v">${hr}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${highRate}</span></div><div class="dr"><span class="l">未报（单）</span><span class="v" style="color:var(--danger)">${hm}</span></div>${ha.length>0?`<div class="dn" style="margin-top:8px"><strong>区县明细：</strong><br>${ha.filter(a=>a.total>0||a.reported>0).map(a=>`${a.name}：共${a.total}单·已报${a.reported}·未报${a.missing}`).join('<br>')||'全部为0'}</div>`:''}</div>${r.bulletin?`<div class="ds"><div class="dst${tc}">通报</div><div class="dn">${esc(r.bulletin)}</div></div>`:''}`;
+  openModal('m-detail');
+}
+
+function deleteFromDetail(){
+  if(!detailId)return;const r=getReports().find(x=>x.id===detailId);if(!r)return;
+  showConfirm('删除日报',`确定删除 ${r.date} 的日报吗？此操作不可恢复。`,()=>{dataMap[curProj]=getReports().filter(x=>x.id!==detailId);saveStore(curProj);renderAll();closeModal('m-detail');showToast('已删除')});
+}
+
+// 生成文本
+function genText(r){
+  const pName=PROJECTS[r.project||curProj].name;
+  let ht=r.highTotal||0,hr=r.highReported||0,hm=r.highMissing||0;
+  if(r.highAreas&&Array.isArray(r.highAreas)){const s=sumHigh(r.highAreas);ht=s.total;hr=s.reported;hm=s.missing}
+  return`【${pName}安全日报】${fmtMD(r.date)}\n\n【出工】 共 ${r.outTotal||'x'}组 | 出工 ${r.outDispatch||'x'} 组 | 已报 ${r.outReported||'x'} 组 | 未报：${r.outMissing||'x'} 组|原因：${r.outReason||''}\n\n【收工】 共 ${r.inTotal||'x'}组 | 出工 ${r.inDispatch||'x'} 组 | 收工 ${r.inReported||'x'} 组 | 未报：${r.inMissing||'x'} 组|原因：${r.inReason||''}\n\n【高危】 共 ${ht||'x'} 单 | 已报 ${hr||'x'} 单 | 未报：${hm||'X'} 单\n\n【通报】：${r.bulletin||''}`;
+}
+
+function previewReport(){
+  const date=$('f-date').value;if(!date){showToast('请选择日期');return}
+  const r={project:curProj,date:date,outTotal:PROJECTS[curProj].totalGroups,outDispatch:num($('f-out-dispatch').value),outReported:num($('f-out-reported').value),outMissing:num($('f-out-missing').value),outReason:$('f-out-reason').value.trim(),inTotal:PROJECTS[curProj].totalGroups,inDispatch:num($('f-in-dispatch').value),inReported:num($('f-in-reported').value),inMissing:num($('f-in-missing').value),inReason:$('f-in-reason').value.trim(),highAreas:collectHigh(),bulletin:$('f-bulletin').value.trim()};
+  const text=genText(r);$('pv-title').textContent='日报预览 · '+fmtMD(date);$('pv-body').textContent=text;window._pvText=text;openModal('m-preview');
+}
+
+function previewOne(id){
+  const r=getReports().find(x=>x.id===id);if(!r)return;
+  const text=genText(r);$('pv-title').textContent='日报预览 · '+fmtMD(r.date);$('pv-body').textContent=text;window._pvText=text;openModal('m-preview');
+}
+
+function copyPreview(){
+  const text=window._pvText||$('pv-body').textContent;
+  navigator.clipboard.writeText(text).then(()=>showToast('已复制到剪贴板')).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');showToast('已复制到剪贴板')}catch(e){showToast('复制失败，请手动选择')}
+    document.body.removeChild(ta);
+  });
+}
+
+function sharePreview(){
+  const text=window._pvText||$('pv-body').textContent;
+  if(navigator.share)navigator.share({title:'安全日报',text:text}).catch(()=>{});
+  else copyPreview();
+}
+
+function exportTextFromDetail(){
+  if(!detailId)return;const r=getReports().find(x=>x.id===detailId);if(!r)return;
+  const text=genText(r);$('pv-title').textContent='日报预览 · '+fmtMD(r.date);$('pv-body').textContent=text;window._pvText=text;closeModal('m-detail');openModal('m-preview');
+}
+
+function exportTextAll(){
+  const reports=getReports();if(reports.length===0){showToast('暂无数据');return}
+  const all=reports.map(r=>genText(r)).join('\n\n'+'='.repeat(40)+'\n\n');
+  $('pv-title').textContent=`${PROJECTS[curProj].shortName}部全部日报（${reports.length}份）`;$('pv-body').textContent=all;window._pvText=all;openModal('m-preview');
+}
+
+// 导出导入
+function exportJSON(){
+  const all={exportDate:fmtDate(new Date()),mobile:dataMap.mobile,tower:dataMap.tower};
+  const blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);const a=document.createElement('a');
+  a.href=url;a.download=`安全日报备份_${fmtDate(new Date())}.json`;a.click();URL.revokeObjectURL(url);
+  showToast(`已导出 ${dataMap.mobile.length+dataMap.tower.length} 份日报`);
+}
+
+function importJSON(e){
+  const file=e.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);let im=[],it=[];
+      if(Array.isArray(data)){im=data.filter(r=>!r.project||r.project==='mobile');it=data.filter(r=>r.project==='tower')}
+      else if(data.mobile||data.tower){im=data.mobile||[];it=data.tower||[]}
+      else throw new Error('格式不识别');
+      const total=im.length+it.length;if(total===0){showToast('文件中没有有效数据');return}
+      showConfirm('导入数据',`将导入 ${total} 条日报（移动${im.length}条/铁塔${it.length}条），同日期将覆盖，是否继续？`,()=>{
+        mergeData('mobile',im);mergeData('tower',it);saveStore('mobile');saveStore('tower');
+        renderAll();closeModal('m-confirm');showToast(`已导入 ${total} 条记录`);
+      });
+    }catch(err){showToast('文件格式错误，无法导入')}
+  };
+  reader.readAsText(file);e.target.value='';
+}
+
+function mergeData(p,newData){
+  newData.forEach(nr=>{const r={...nr,project:p};if(!r.id)r.id='r-'+p+'-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);const idx=dataMap[p].findIndex(x=>x.date===r.date);if(idx>=0)dataMap[p][idx]=r;else dataMap[p].push(r)});
+  dataMap[p].sort((a,b)=>b.date.localeCompare(a.date));
+}
+
+function confirmClearAll(){
+  const reports=getReports();if(reports.length===0){showToast('暂无数据');return}
+  showConfirm('清空数据',`确定清空 ${PROJECTS[curProj].shortName}部全部 ${reports.length} 份日报吗？\n\n建议先导出备份！\n此操作不可恢复。`,()=>{dataMap[curProj]=[];saveStore(curProj);renderAll();closeModal('m-confirm');showToast(`已清空${PROJECTS[curProj].shortName}部数据`)});
+}
+
+function renderBackupHint(){
+  const c=$('bh-container'),count=getReports().length;
+  if(count>=30)c.innerHTML=`<div class="bh"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>${PROJECTS[curProj].shortName}部数据已积累 ${count} 份日报，建议导出备份</span></div>`;
+  else c.innerHTML='';
+}
+
+function renderAll(){renderHistory();renderBackupHint();if($('tc-stats').classList.contains('on'))renderStats()}
+
+// 月度统计
+function setStatsThisMonth(){const d=new Date();$('stats-month').value=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;renderStats()}
+
+function renderStats(){
+  const mv=$('stats-month').value;if(!mv){setStatsThisMonth();return}
+  const[y,m]=mv.split('-').map(Number);
+  const reports=getReports().filter(r=>{const d=new Date(r.date+'T00:00:00');return d.getFullYear()===y&&(d.getMonth()+1)===m});
+  const sorted=[...reports].sort((a,b)=>a.date.localeCompare(b.date));
+  let ods=0,ors=0,oms=0,ids=0,irs=0,ims=0,hts=0,hrs=0,hms=0;
+  sorted.forEach(r=>{
+    ods+=num(r.outDispatch);ors+=num(r.outReported);oms+=num(r.outMissing);
+    ids+=num(r.inDispatch);irs+=num(r.inReported);ims+=num(r.inMissing);
+    if(r.highAreas&&Array.isArray(r.highAreas)){const s=sumHigh(r.highAreas);hts+=s.total;hrs+=s.reported;hms+=s.missing}
+    else{hts+=num(r.highTotal);hrs+=num(r.highReported);hms+=num(r.highMissing)}
+  });
+  $('sm-or').textContent=ods>0?((ors/ods)*100).toFixed(1)+'%':'--';
+  $('sm-ir').textContent=ids>0?((irs/ids)*100).toFixed(1)+'%':'--';
+  $('sm-hr').textContent=hts>0?((hrs/hts)*100).toFixed(1)+'%':'--';
+  $('sm-ot').textContent=ods;$('sm-it').textContent=irs;$('sm-ht').textContent=hts;
+  $('sm-om').textContent=oms;$('sm-im').textContent=ims;$('sm-hm').textContent=hms;
+  $('sm-count').textContent=sorted.length;
+  $('stats-badge').textContent=`${y}年${m}月`;
+  const th=PROJECTS[curProj].theme;
+  document.querySelectorAll('#tc-stats .si').forEach(el=>{el.classList.remove('t');if(th==='t')el.classList.add('t')});
+  renderChart(sorted);
+  renderAreaTable(sorted);
+  $('chart-legend').innerHTML=`<div class="clegi"><div class="clegd" style="background:var(--primary)"></div>出工上报率</div><div class="clegi"><div class="clegd" style="background:var(--success)"></div>收工上报率</div><div class="clegi"><div class="clegd" style="background:var(--danger)"></div>高危上报率</div>`;
+}
+
+function renderChart(data){
+  const c=$('chart-container'),e=$('chart-empty');
+  if(!data||data.length===0){c.innerHTML='';e.style.display='block';return}
+  e.style.display='none';
+  const W=700,H=260,pL=40,pR=18,pT=18,pB=36,cW=W-pL-pR,cH=H-pT-pB,n=data.length,sX=n>1?cW/(n-1):0;
+  const pts=data.map((r,i)=>{
+    const oR=r.outDispatch>0?(r.outReported/r.outDispatch)*100:null;
+    const iR=r.inDispatch>0?(r.inReported/r.inDispatch)*100:null;
+    let hT=num(r.highTotal),hR=num(r.highReported);
+    if(r.highAreas&&Array.isArray(r.highAreas)){const s=sumHigh(r.highAreas);hT=s.total;hR=s.reported}
+    const hR2=hT>0?(hR/hT)*100:null;
+    return{date:r.date,x:pL+(n>1?i*sX:cW/2),out:oR,in:iR,high:hR2};
+  });
+  const mkPath=k=>{const p=pts.filter(x=>x[k]!==null);if(!p.length)return'';return p.map((x,i)=>(i?'L':'M')+x.x+','+(pT+cH-(x[k]/100)*cH)).join(' ')};
+  const mkArea=k=>{const p=pts.filter(x=>x[k]!==null);if(!p.length)return'';let d=p.map((x,i)=>(i?'L':'M')+x.x+','+(pT+cH-(x[k]/100)*cH)).join(' ');d+=` L${p[p.length-1].x},${pT+cH} L${p[0].x},${pT+cH} Z`;return d};
+  const mkDots=(k,cls)=>pts.filter(x=>x[k]!==null).map(x=>`<circle class="${cls}" cx="${x.x}" cy="${pT+cH-(x[k]/100)*cH}" r="3.5" data-d="${x.date}" data-o="${x.out!==null?x.out.toFixed(0)+'%':'--'}" data-i="${x.in!==null?x.in.toFixed(0)+'%':'--'}" data-h="${x.high!==null?x.high.toFixed(0)+'%':'--'}" style="cursor:pointer"/>`).join('');
+  let yT='';
+  for(let v=0;v<=100;v+=25){const y=pT+cH-(v/100)*cH;yT+=`<line class="cgl" x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}"/><text class="calt calty" x="${pL-6}" y="${y+4}">${v}%</text>`}
+  const xI=n>10?Math.ceil(n/7):1;let xT='';
+  pts.forEach((p,i)=>{if(i%xI===0||i===n-1){const d=new Date(p.date+'T00:00:00');xT+=`<text class="cxl" x="${p.x}" y="${pT+cH+18}">${d.getMonth()+1}/${d.getDate()}</text>`}});
+  c.innerHTML=`<div class="cw"><svg class="csvg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${yT}<line class="cal" x1="${pL}" y1="${pT+cH}" x2="${W-pR}" y2="${pT+cH}"/><line class="cal" x1="${pL}" y1="${pT}" x2="${pL}" y2="${pT+cH}"/><path class="cao" d="${mkArea('out')}"/><path class="clo" d="${mkPath('out')}"/><path class="cli" d="${mkPath('in')}"/><path class="clh" d="${mkPath('high')}"/>${mkDots('out','cdo')}${mkDots('in','cdi')}${mkDots('high','cdh')}${xT}</svg></div>`;
+  const tooltip=document.createElement('div');tooltip.style.cssText='display:none;position:absolute;background:var(--text);color:#fff;padding:6px 10px;border-radius:6px;font-size:.75rem;line-height:1.6;pointer-events:none;white-space:nowrap;z-index:10;box-shadow:0 2px 8px rgba(0,0,0,.2)';
+  c.querySelector('.cw').appendChild(tooltip);
+  c.querySelectorAll('circle').forEach(dot=>{
+    dot.addEventListener('mouseenter',()=>{const d=new Date(dot.dataset.d+'T00:00:00');tooltip.innerHTML=`<strong>${d.getMonth()+1}月${d.getDate()}日</strong><br>出工:${dot.dataset.o} · 收工:${dot.dataset.i} · 高危:${dot.dataset.h}`;tooltip.style.display='block'});
+    dot.addEventListener('mousemove',e=>{const r=c.querySelector('.cw').getBoundingClientRect();tooltip.style.left=(e.clientX-r.left+12)+'px';tooltip.style.top=(e.clientY-r.top-10)+'px'});
+    dot.addEventListener('mouseleave',()=>tooltip.style.display='none');
+  });
+}
+
+function renderAreaTable(data){
+  const tb=$('at-body'),areas=PROJECTS[curProj].highAreas;
+  const stats={};areas.forEach(n=>stats[n]={total:0,reported:0,missing:0});
+  data.forEach(r=>{
+    if(r.highAreas&&Array.isArray(r.highAreas))r.highAreas.forEach(a=>{if(stats[a.name]){stats[a.name].total+=num(a.total);stats[a.name].reported+=num(a.reported);stats[a.name].missing+=num(a.missing)}});
+    else if(num(r.highTotal)>0&&areas.length>0){stats[areas[0]].total+=num(r.highTotal);stats[areas[0]].reported+=num(r.highReported);stats[areas[0]].missing+=num(r.highMissing)}
+  });
+  let html='',gt=0,gr=0,gm=0;
+  areas.forEach(n=>{const s=stats[n];const rate=s.total>0?((s.reported/s.total)*100).toFixed(1)+'%':'--';html+=`<tr><td class="an">${n}</td><td>${s.total}</td><td class="rn">${s.reported}</td><td class="mn">${s.missing}</td><td><strong>${rate}</strong></td></tr>`;gt+=s.total;gr+=s.reported;gm+=s.missing});
+  const gRate=gt>0?((gr/gt)*100).toFixed(1)+'%':'--';
+  html+=`<tfoot><tr><td class="an">合计</td><td>${gt}</td><td class="rn">${gr}</td><td class="mn">${gm}</td><td><strong>${gRate}</strong></td></tr></tfoot>`;
+  tb.innerHTML=html;
+}
+
+function exportStatsReport(){
+  const mv=$('stats-month').value;if(!mv){showToast('请先选择月份');return}
+  const[y,m]=mv.split('-').map(Number);const p=PROJECTS[curProj];
+  const reports=getReports().filter(r=>{const d=new Date(r.date+'T00:00:00');return d.getFullYear()===y&&(d.getMonth()+1)===m});
+  const sorted=[...reports].sort((a,b)=>a.date.localeCompare(b.date));
+  if(sorted.length===0){showToast(`${y}年${m}月暂无数据`);return}
+  let ods=0,ors=0,oms=0,ids=0,irs=0,ims=0,hts=0,hrs=0,hms=0;
+  const aStats={};p.highAreas.forEach(n=>aStats[n]={total:0,reported:0,missing:0});
+  sorted.forEach(r=>{
+    ods+=num(r.outDispatch);ors+=num(r.outReported);oms+=num(r.outMissing);
+    ids+=num(r.inDispatch);irs+=num(r.inReported);ims+=num(r.inMissing);
+    if(r.highAreas&&Array.isArray(r.highAreas)){r.highAreas.forEach(a=>{if(aStats[a.name]){aStats[a.name].total+=num(a.total);aStats[a.name].reported+=num(a.reported);aStats[a.name].missing+=num(a.missing)}});const s=sumHigh(r.highAreas);hts+=s.total;hrs+=s.reported;hms+=s.missing}
+    else{hts+=num(r.highTotal);hrs+=num(r.highReported);hms+=num(r.highMissing)}
+  });
+  const oR=ods>0?((ors/ods)*100).toFixed(1)+'%':'--',iR=ids>0?((irs/ids)*100).toFixed(1)+'%':'--',hR=hts>0?((hrs/hts)*100).toFixed(1)+'%':'--';
+  let text=`【${p.name}月度统计报表】\n统计月份：${y}年${m}月\n填报份数：${sorted.length} 份\n生成时间：${fmtDate(new Date())}\n\n${'='.repeat(40)}\n\n【三率汇总】\n出工上报率：${oR}（${ors}/${ods}）\n收工上报率：${iR}（${irs}/${ids}）\n高危上报率：${hR}（${hrs}/${hts}）\n\n${'='.repeat(40)}\n\n【月度汇总】\n总出工组数：${ods}\n总收工组数：${irs}\n总高危单数：${hts}\n\n${'='.repeat(40)}\n\n【未报统计】\n出工未报次数：${oms}\n收工未报次数：${ims}\n高危未报单数：${hms}\n\n${'='.repeat(40)}\n\n【高危工单 · 按区县统计】\n${'区县'.padEnd(10)}共(单)  已报   未报   上报率\n${'-'.repeat(38)}\n`;
+  p.highAreas.forEach(n=>{const s=aStats[n];const rate=s.total>0?((s.reported/s.total)*100).toFixed(1)+'%':'--';text+=`${n.padEnd(10)}${String(s.total).padStart(5)}   ${String(s.reported).padStart(4)}   ${String(s.missing).padStart(4)}   ${rate.padStart(6)}\n`});
+  text+=`${'-'.repeat(38)}\n${'合计'.padEnd(10)}${String(hts).padStart(5)}   ${String(hrs).padStart(4)}   ${String(hms).padStart(4)}   ${hR.padStart(6)}\n`;
+  $('pv-title').textContent=`月度统计报表 · ${y}年${m}月`;$('pv-body').textContent=text;window._pvText=text;openModal('m-preview');
+}
+
+init();
+</script>
+</body>
+</html>
