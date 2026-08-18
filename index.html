@@ -31,12 +31,12 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{font-size:16px}
 svg{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:env(safe-area-inset-bottom)}
-.app{max-width:840px;margin:0 auto;padding:10px 10px 30px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;-webkit-font-smoothing:antialiased;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.app{max-width:840px;margin:0 auto;padding:14px 10px 30px}
 
 /* 项目切换 */
-.proj{display:flex;gap:5px;background:var(--card);border-radius:var(--r);padding:4px;box-shadow:var(--sh2);margin-bottom:10px}
-.proj-tab{flex:1;border:none;background:transparent;padding:13px 6px;font-size:.86rem;font-weight:600;color:var(--text2);border-radius:var(--r2);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;min-height:46px;transition:all .2s}
+.proj{display:flex;gap:5px;background:var(--card);border-radius:var(--r);padding:5px;box-shadow:var(--sh2);margin-bottom:10px;position:sticky;top:env(safe-area-inset-top);z-index:50}
+.proj-tab{flex:1;border:none;background:transparent;padding:15px 6px;font-size:.88rem;font-weight:600;color:var(--text2);border-radius:var(--r2);cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;min-height:52px;transition:all .2s}
 .proj-tab svg{width:17px;height:17px}
 .proj-tab.on.m{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.3)}
 .proj-tab.on.t{background:var(--tower);color:#fff;box-shadow:0 2px 8px rgba(234,88,12,.3)}
@@ -234,7 +234,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 
 /* 移动端 */
 @media(max-width:600px){
-  .app{padding:8px 8px 24px}
+  .app{padding:12px 8px 24px}
   .head{padding:16px 18px}
   .head h1{font-size:1.05rem}
   .card{padding:14px}
@@ -243,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
   .si .n{font-size:1.05rem}
   .si .l{font-size:.62rem}
   .tab{font-size:.78rem;padding:11px 4px}
-  .proj-tab{font-size:.8rem;padding:11px 4px}
+  .proj-tab{font-size:.82rem;padding:13px 4px;min-height:48px}
   .btn{padding:8px 11px;font-size:.8rem}
   .head-btns .btn{flex:1;min-width:0;justify-content:center}
   .modal{padding:18px;margin:8px}
