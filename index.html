@@ -21,6 +21,7 @@
   --success: #16a34a; --success-light: #f0fdf4;
   --warning: #f59e0b; --warning-light: #fffbeb;
   --tower: #ea580c; --tower-dark: #c2410c; --tower-light: #fff7ed;
+  --eng: #059669; --eng-dark: #047857; --eng-light: #ecfdf5;
   --bg: #f1f5f9; --bg-soft: #f8fafc; --card: #fff;
   --text: #0f172a; --text2: #64748b; --text3: #94a3b8;
   --border: #e2e8f0; --border2: #f1f5f9;
@@ -40,6 +41,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .proj-tab svg{width:17px;height:17px}
 .proj-tab.on.m{background:var(--primary);color:#fff;box-shadow:0 2px 8px rgba(37,99,235,.3)}
 .proj-tab.on.t{background:var(--tower);color:#fff;box-shadow:0 2px 8px rgba(234,88,12,.3)}
+.proj-tab.on.e{background:var(--eng);color:#fff;box-shadow:0 2px 8px rgba(5,150,105,.3)}
 .proj-tab .ct{font-size:.7rem;padding:1px 6px;border-radius:8px;background:rgba(0,0,0,.08)}
 .proj-tab.on .ct{background:rgba(255,255,255,.3)}
 
@@ -47,6 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .head{color:#fff;border-radius:var(--r);padding:20px 22px;box-shadow:var(--sh2);margin-bottom:10px;position:relative;overflow:hidden}
 .head.m{background:linear-gradient(135deg,#2563eb,#3b82f6)}
 .head.t{background:linear-gradient(135deg,#ea580c,#f97316)}
+.head.e{background:linear-gradient(135deg,#059669,#10b981)}
 .head::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.08);border-radius:50%}
 .head h1{font-size:1.15rem;font-weight:700;position:relative;z-index:1}
 .head .sub{font-size:.78rem;opacity:.85;margin-top:4px;position:relative;z-index:1}
@@ -61,9 +64,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .btn-p:hover{background:var(--primary-dark)}
 .btn-t{background:var(--tower);color:#fff;box-shadow:0 2px 6px rgba(234,88,12,.2)}
 .btn-t:hover{background:var(--tower-dark)}
+.btn-e{background:var(--eng);color:#fff;box-shadow:0 2px 6px rgba(5,150,105,.2)}
+.btn-e:hover{background:var(--eng-dark)}
 .btn-o{background:var(--card);color:var(--primary);border:1.5px solid var(--primary)}
 .btn-o:hover{background:var(--primary-light)}
 .btn-o.t{color:var(--tower);border-color:var(--tower)}
+.btn-o.e{color:var(--eng);border-color:var(--eng)}
 .btn-o.t:hover{background:var(--tower-light)}
 .btn-d{background:var(--card);color:var(--danger);border:1.5px solid var(--danger)}
 .btn-d:hover{background:var(--danger-light)}
@@ -79,6 +85,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .tab svg{width:16px;height:16px}
 .tab.on.m{background:var(--primary);color:#fff;box-shadow:0 2px 6px rgba(37,99,235,.2)}
 .tab.on.t{background:var(--tower);color:#fff;box-shadow:0 2px 6px rgba(234,88,12,.2)}
+.tab.on.e{background:var(--eng);color:#fff;box-shadow:0 2px 6px rgba(5,150,105,.2)}
 .tc{display:none}
 .tc.on{display:block;animation:fi .2s}
 @keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
@@ -110,12 +117,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .st svg{width:16px;height:16px}
 .st:first-child{margin-top:0}
 .st.t{color:var(--tower);background:var(--tower-light)}
+.st.e{color:var(--eng);background:var(--eng-light)}
 
 /* 统计卡片 - 强制横排 */
 .sg{display:flex;gap:6px;margin:10px 0}
 .si{flex:1 1 0;min-width:0;text-align:center;padding:11px 3px;border-radius:var(--r2);background:var(--bg-soft);border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;gap:2px}
 .si .n{font-size:1.2rem;font-weight:800;color:var(--primary);line-height:1.2}
 .si.t .n{color:var(--tower)}
+.si.e .n{color:var(--eng)}
 .si .l{font-size:.68rem;color:var(--text2);font-weight:500;line-height:1.3}
 .si.d{background:var(--danger-light);border-color:#fecaca}
 .si.d .n{color:var(--danger)}
@@ -168,6 +177,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .fchip:hover{border-color:var(--primary);color:var(--primary)}
 .fchip.on{background:var(--primary);color:#fff;border-color:var(--primary)}
 .fchip.on.t{background:var(--tower);border-color:var(--tower)}
+.fchip.on.e{background:var(--eng);border-color:var(--eng)}
 
 /* 区县表格 */
 .at{width:100%;border-collapse:collapse;font-size:.82rem;background:var(--card);border-radius:var(--r2);overflow:hidden}
@@ -192,6 +202,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .modal h3{font-size:1rem;font-weight:700;margin-bottom:14px}
 .mtext{font-size:.86rem;color:var(--text2);line-height:1.6;margin-bottom:16px;white-space:pre-wrap;word-break:break-all}
 .mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.set-proj{border:1px solid var(--border);border-radius:var(--r2);padding:12px;margin-bottom:10px}
+.set-title{font-weight:700;font-size:.9rem;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.set-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.set-note{font-size:.74rem;color:var(--text3);margin-top:6px;line-height:1.5}
 .ptext{background:var(--bg);border-radius:var(--r2);padding:13px;font-size:.84rem;line-height:1.8;white-space:pre-wrap;word-break:break-all;max-height:50vh;overflow-y:auto;font-family:-apple-system,"SF Mono",Consolas,monospace}
 
 /* Toast */
@@ -227,6 +241,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
 .ds:last-child{margin-bottom:0}
 .dst{font-size:.82rem;font-weight:700;color:var(--primary);margin-bottom:7px;padding:6px 10px;background:var(--primary-light);border-radius:6px}
 .dst.t{color:var(--tower);background:var(--tower-light)}
+.dst.e{color:var(--eng);background:var(--eng-light)}
 .dr{display:flex;justify-content:space-between;font-size:.84rem;padding:3px 0}
 .dr .l{color:var(--text2)}
 .dr .v{font-weight:600}
@@ -243,7 +258,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
   .si .n{font-size:1.05rem}
   .si .l{font-size:.62rem}
   .tab{font-size:.78rem;padding:11px 4px}
-  .proj-tab{font-size:.82rem;padding:13px 4px;min-height:48px}
+  .proj-tab{font-size:.82rem;padding:13px 4px;min-height:48px;gap:4px}
+  .proj-tab svg{display:none}
+  .proj-tab .ct{font-size:.66rem;padding:1px 5px}
   .btn{padding:8px 11px;font-size:.8rem}
   .head-btns .btn{flex:1;min-width:0;justify-content:center}
   .modal{padding:18px;margin:8px}
@@ -261,11 +278,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
   <div class="proj">
     <button class="proj-tab on m" id="pt-mobile" onclick="switchProject('mobile')">
       <svg viewBox="0 0 24 24"><path d="M2 16.1A5 5 0 0 1 5.9 13M2 12a5 5 0 0 1 5-5M19.5 12.5a5 5 0 1 0-5-5M22 16.1A5 5 0 0 0 18.1 13"/><circle cx="12" cy="12" r="3"/></svg>
-      普洱移动维护<span class="ct">37组</span>
+      移动<span class="ct" id="ct-mobile">37组</span>
     </button>
     <button class="proj-tab" id="pt-tower" onclick="switchProject('tower')">
       <svg viewBox="0 0 24 24"><path d="M12 2L4 22h16L12 2z"/><line x1="12" y1="8" x2="12" y2="14"/></svg>
-      普洱铁塔维护<span class="ct">34组</span>
+      铁塔<span class="ct" id="ct-tower">34组</span>
+    </button>
+    <button class="proj-tab" id="pt-eng" onclick="switchProject('eng')">
+      <svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      工程<span class="ct" id="ct-eng">9组</span>
     </button>
   </div>
 
@@ -274,6 +295,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
     <h1 id="head-title">普洱移动维护项目部 · 安全日报</h1>
     <div class="sub">每日出工·收工·高危·通报记录</div>
     <div class="head-btns">
+      <button class="btn btn-w" onclick="openSettings()">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>班组设置
+      </button>
       <button class="btn btn-w" onclick="exportJSON()">
         <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>导出备份
       </button>
@@ -473,14 +497,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC
   </div>
 </div>
 
+<!-- 弹窗：班组设置 -->
+<div class="mask" id="m-settings" onclick="if(event.target===this)closeModal('m-settings')">
+  <div class="modal">
+    <h3 style="display:flex;align-items:center;gap:8px"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>班组与区县设置</h3>
+    <div id="set-body"></div>
+    <div class="mact" style="margin-top:14px">
+      <button class="btn btn-g" onclick="resetSettingsForm()">恢复默认</button>
+      <button class="btn btn-g" onclick="closeModal('m-settings')">取消</button>
+      <button class="btn btn-p" onclick="saveSettings()">保存设置</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const PROJECTS={
   mobile:{key:'mobile',name:'普洱移动维护项目部',shortName:'移动',totalGroups:37,theme:'m',highAreas:['墨江移动','景东移动','思茅移动','镇沅移动']},
-  tower:{key:'tower',name:'普洱铁塔维护项目部',shortName:'铁塔',totalGroups:34,theme:'t',highAreas:['思茅铁塔','景东铁塔','景谷铁塔','镇沅铁塔','江城铁塔']}
+  tower:{key:'tower',name:'普洱铁塔维护项目部',shortName:'铁塔',totalGroups:34,theme:'t',highAreas:['思茅铁塔','景东铁塔','景谷铁塔','镇沅铁塔','江城铁塔']},
+  eng:{key:'eng',name:'普洱工程项目部',shortName:'工程',totalGroups:9,theme:'e',highAreas:[]}
 };
-let curProj='mobile',dataMap={mobile:[],tower:[]},editingId=null,detailId=null,filterStatus='all',confirmCb=null,toastTimer=null,deletedReport=null;
+const PROJ_KEYS=Object.keys(PROJECTS);
+const DEFAULT_CONF=PROJ_KEYS.reduce((o,k)=>(o[k]={totalGroups:PROJECTS[k].totalGroups,highAreas:[...PROJECTS[k].highAreas]},o),{});
+const CONF_KEY='wb_safety_report_conf';
+let curProj='mobile',dataMap={mobile:[],tower:[],eng:[]},editingId=null,detailId=null,filterStatus='all',confirmCb=null,toastTimer=null,deletedReport=null;
 
 const $=id=>document.getElementById(id);
 const num=v=>{const n=parseInt(v);return isNaN(n)?0:n};
@@ -524,7 +565,8 @@ function init(){
     }).catch(()=>{});
   }
   // 数据纯本地存储：每次打开从 localStorage 自动读取历史数据
-  ['mobile','tower'].forEach(p=>{
+  loadConf();
+  PROJ_KEYS.forEach(p=>{
     const st=localStorage.getItem(sKey(p));
     if(st){try{dataMap[p]=JSON.parse(st)}catch(e){dataMap[p]=[]}}
     if(!Array.isArray(dataMap[p]))dataMap[p]=[];
@@ -537,27 +579,77 @@ function init(){
 
 function saveStore(p){localStorage.setItem(sKey(p),JSON.stringify(dataMap[p]))}
 
+// ===== 班组与区县设置 =====
+function loadConf(){
+  try{
+    const s=JSON.parse(localStorage.getItem(CONF_KEY)||'{}');
+    PROJ_KEYS.forEach(k=>{
+      const c=s[k];
+      if(c&&c.totalGroups){const t=parseInt(c.totalGroups);if(t>=1&&t<=999)PROJECTS[k].totalGroups=t}
+      if(c&&Array.isArray(c.highAreas))PROJECTS[k].highAreas=c.highAreas.filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim()).slice(0,12);
+    });
+  }catch(e){}
+}
+
+// 项目的高危区县；未配置时用单行"合计"，保证高危栏可用
+function getAreas(p){const a=PROJECTS[p].highAreas;return Array.isArray(a)&&a.length>0?a:['合计']}
+
+function openSettings(){buildSettingsForm();openModal('m-settings')}
+
+function buildSettingsForm(){
+  const colors={mobile:'var(--primary)',tower:'var(--tower)',eng:'var(--eng)'};
+  $('set-body').innerHTML=PROJ_KEYS.map(k=>{
+    const p=PROJECTS[k];
+    return `<div class="set-proj">
+      <div class="set-title"><span class="set-dot" style="background:${colors[k]||'var(--primary)'}"></span>${p.name}</div>
+      <div class="fr" style="margin-bottom:8px"><label class="fl">班组总数（1-999）</label><input type="number" class="fi" id="set-total-${k}" min="1" max="999" value="${p.totalGroups}" style="max-width:140px"></div>
+      <div class="fr" style="margin-bottom:0"><label class="fl">高危区县 <span style="font-weight:400;color:var(--text3)">每行一个</span></label><textarea class="fta" id="set-areas-${k}" rows="3" placeholder="留空则只需填高危合计&#10;示例：思茅工程&#10;景东工程">${p.highAreas.join('\n')}</textarea></div>
+      <div class="set-note">改动班组数只影响新填报的日报，历史日报保持原数值。</div>
+    </div>`;
+  }).join('');
+}
+
+function resetSettingsForm(){
+  PROJ_KEYS.forEach(k=>{$('set-total-'+k).value=DEFAULT_CONF[k].totalGroups;$('set-areas-'+k).value=DEFAULT_CONF[k].highAreas.join('\n')});
+  showToast('已恢复默认值，点击「保存设置」生效');
+}
+
+function saveSettings(){
+  const conf={};
+  for(const k of PROJ_KEYS){
+    const t=parseInt($('set-total-'+k).value);
+    if(isNaN(t)||t<1||t>999){showToast(PROJECTS[k].shortName+'部班组总数需为 1-999 的数字');return}
+    const areas=[...new Set($('set-areas-'+k).value.split('\n').map(s=>s.trim()).filter(Boolean))];
+    if(areas.length>12){showToast(PROJECTS[k].shortName+'部区县最多 12 个');return}
+    conf[k]={totalGroups:t,highAreas:areas};
+  }
+  localStorage.setItem(CONF_KEY,JSON.stringify(conf));
+  loadConf();
+  applyTheme();renderAll();calcStats();
+  closeModal('m-settings');
+  showToast('班组设置已保存');
+}
+
 // 主题
 function applyTheme(){
   const p=PROJECTS[curProj],th=p.theme;
-  $('pt-mobile').classList.toggle('on',curProj==='mobile');
-  $('pt-tower').classList.toggle('on',curProj==='tower');
-  $('pt-mobile').classList.toggle('m',curProj==='mobile');
-  $('pt-tower').classList.toggle('t',curProj==='tower');
-  if(curProj==='tower')$('pt-tower').classList.add('t');
+  PROJ_KEYS.forEach(k=>{
+    const btn=$('pt-'+k);
+    btn.classList.toggle('on',curProj===k);
+    btn.classList.remove('m','t','e');
+    if(curProj===k)btn.classList.add(th);
+    $('ct-'+k).textContent=PROJECTS[k].totalGroups+'组';
+  });
   const h=$('head');h.className='head '+th;
   $('head-title').textContent=p.name+' · 安全日报';
-  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('m','t');t.classList.add(th)});
-  document.querySelectorAll('.st').forEach(s=>{s.classList.remove('t');if(th==='t')s.classList.add('t')});
-  $('ct-wrap').classList.toggle('t',th==='t');
-  $('save-btn').className='btn '+(th==='t'?'btn-t':'btn-p');
-  $('preview-btn').classList.toggle('t',th==='t');
-  $('export-all-btn').classList.toggle('t',th==='t');
-  $('stats-export').classList.toggle('t',th==='t');
-  $('dt-export').classList.toggle('t',th==='t');
+  document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('m','t','e');t.classList.add(th)});
+  document.querySelectorAll('.st').forEach(s=>{s.classList.remove('t','e');if(th!=='m')s.classList.add(th)});
+  $('ct-wrap').classList.toggle('t',th==='t');$('ct-wrap').classList.toggle('e',th==='e');
+  $('save-btn').className='btn '+(th==='t'?'btn-t':th==='e'?'btn-e':'btn-p');
+  ['preview-btn','export-all-btn','stats-export','dt-export'].forEach(id=>{const el=$(id);el.classList.toggle('t',th==='t');el.classList.toggle('e',th==='e')});
   $('f-out-total').querySelector('.tn').textContent=p.totalGroups;
   $('f-in-total').querySelector('.tn').textContent=p.totalGroups;
-  document.querySelectorAll('.fchip.on').forEach(c=>{c.classList.remove('t');if(th==='t')c.classList.add('t')});
+  document.querySelectorAll('.fchip.on').forEach(c=>{c.classList.remove('t','e');if(th!=='m')c.classList.add(th)});
   renderHighAreas();
 }
 
@@ -594,7 +686,7 @@ function calcStats(){
 
 // 高危区县
 function renderHighAreas(){
-  const areas=PROJECTS[curProj].highAreas,c=$('high-areas-list');
+  const areas=getAreas(curProj),c=$('high-areas-list');
   c.innerHTML='<div class="har" style="margin-bottom:4px"><div style="font-size:.72rem;color:var(--text3);font-weight:700">区县</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">共(单)</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">已报</div><div style="font-size:.72rem;color:var(--text3);font-weight:700;text-align:center">未报</div></div>'+
   areas.map(n=>`<div class="har" data-area="${n}"><div class="hn">${n}</div><input type="number" class="fi" placeholder="0" data-f="total" oninput="calcHigh()"><input type="number" class="fi" placeholder="0" data-f="reported" oninput="calcHigh()"><input type="number" class="fi" placeholder="0" data-f="missing" readonly style="background:var(--bg);color:var(--danger);font-weight:700"></div>`).join('');
   calcHigh();
@@ -679,13 +771,13 @@ function resetForm(){
 // 历史筛选
 function setFilterStatus(s){
   filterStatus=s;const th=PROJECTS[curProj].theme;
-  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t');if(c.dataset.s===s){c.classList.add('on');if(th==='t')c.classList.add('t')}});
+  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t','e');if(c.dataset.s===s){c.classList.add('on');if(th!=='m')c.classList.add(th)}});
   renderHistory();
 }
 function clearFilter(){
   filterStatus='all';$('filter-from').value='';$('filter-to').value='';
   const th=PROJECTS[curProj].theme;
-  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t');if(c.dataset.s==='all'){c.classList.add('on');if(th==='t')c.classList.add('t')}});
+  document.querySelectorAll('#fsg .fchip').forEach(c=>{c.classList.remove('on','t','e');if(c.dataset.s==='all'){c.classList.add('on');if(th!=='m')c.classList.add(th)}});
   renderHistory();
 }
 
@@ -758,7 +850,7 @@ function showDetail(id){
   let ht=num(r.highTotal),hr=num(r.highReported),hm=num(r.highMissing);let ha=r.highAreas||[];
   if(ha.length>0){const s=sumHigh(ha);ht=s.total;hr=s.reported;hm=s.missing}
   const highRate=ht>0?((hr/ht)*100).toFixed(1)+'%':'--';
-  const tc=curProj==='tower'?' t':'';
+  const tth=PROJECTS[curProj].theme,tc=tth==='t'?' t':tth==='e'?' e':'';
   $('dt-body').innerHTML=`<div class="ds"><div class="dst${tc}">出工</div><div class="dr"><span class="l">共（组）</span><span class="v">${r.outTotal||0}</span></div><div class="dr"><span class="l">出工（组）</span><span class="v">${r.outDispatch||0}</span></div><div class="dr"><span class="l">已报（组）</span><span class="v">${r.outReported||0}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${outRate}</span></div><div class="dr"><span class="l">未报（组）</span><span class="v" style="color:var(--danger)">${r.outMissing||0}</span></div>${r.outReason?`<div class="dn"><strong>原因：</strong>${esc(r.outReason)}</div>`:''}</div><div class="ds"><div class="dst${tc}">收工</div><div class="dr"><span class="l">共（组）</span><span class="v">${r.inTotal||0}</span></div><div class="dr"><span class="l">出工（组）</span><span class="v">${r.inDispatch||0}</span></div><div class="dr"><span class="l">收工（组）</span><span class="v">${r.inReported||0}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${inRate}</span></div><div class="dr"><span class="l">未报（组）</span><span class="v" style="color:var(--danger)">${r.inMissing||0}</span></div>${r.inReason?`<div class="dn"><strong>原因：</strong>${esc(r.inReason)}</div>`:''}</div><div class="ds"><div class="dst${tc}">高危（汇总）</div><div class="dr"><span class="l">共（单）</span><span class="v">${ht}</span></div><div class="dr"><span class="l">已报（单）</span><span class="v">${hr}</span></div><div class="dr"><span class="l">上报率</span><span class="v">${highRate}</span></div><div class="dr"><span class="l">未报（单）</span><span class="v" style="color:var(--danger)">${hm}</span></div>${ha.length>0?`<div class="dn" style="margin-top:8px"><strong>区县明细：</strong><br>${ha.filter(a=>a.total>0||a.reported>0).map(a=>`${a.name}：共${a.total}单·已报${a.reported}·未报${a.missing}`).join('<br>')||'全部为0'}</div>`:''}</div>${r.bulletin?`<div class="ds"><div class="dst${tc}">通报</div><div class="dn">${esc(r.bulletin)}</div></div>`:''}`;
   openModal('m-detail');
 }
@@ -815,11 +907,12 @@ function exportTextAll(){
 
 // 导出导入
 function exportJSON(){
-  const all={exportDate:fmtDate(new Date()),mobile:dataMap.mobile,tower:dataMap.tower};
+  let conf=null;try{conf=JSON.parse(localStorage.getItem(CONF_KEY)||'null')}catch(e){}
+  const all=Object.assign({exportDate:fmtDate(new Date())},conf?{conf:conf}:{},PROJ_KEYS.reduce((o,k)=>(o[k]=dataMap[k],o),{}));
   const blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});
   const url=URL.createObjectURL(blob);const a=document.createElement('a');
   a.href=url;a.download=`安全日报备份_${fmtDate(new Date())}.json`;a.click();URL.revokeObjectURL(url);
-  showToast(`已导出 ${dataMap.mobile.length+dataMap.tower.length} 份日报`);
+  showToast(`已导出 ${PROJ_KEYS.reduce((s,k)=>s+dataMap[k].length,0)} 份日报`);
 }
 
 function importJSON(e){
@@ -827,14 +920,19 @@ function importJSON(e){
   const reader=new FileReader();
   reader.onload=ev=>{
     try{
-      const data=JSON.parse(ev.target.result);let im=[],it=[];
-      if(Array.isArray(data)){im=data.filter(r=>!r.project||r.project==='mobile');it=data.filter(r=>r.project==='tower')}
-      else if(data.mobile||data.tower){im=data.mobile||[];it=data.tower||[]}
+      const data=JSON.parse(ev.target.result);
+      const arrs={};
+      if(Array.isArray(data)){arrs.mobile=data.filter(r=>!r.project||r.project==='mobile');arrs.tower=data.filter(r=>r.project==='tower');arrs.eng=data.filter(r=>r.project==='eng')}
+      else if(PROJ_KEYS.some(k=>data[k])){PROJ_KEYS.forEach(k=>arrs[k]=Array.isArray(data[k])?data[k]:[])}
       else throw new Error('格式不识别');
-      const total=im.length+it.length;if(total===0){showToast('文件中没有有效数据');return}
-      showConfirm('导入数据',`将导入 ${total} 条日报（移动${im.length}条/铁塔${it.length}条），同日期将覆盖，是否继续？`,()=>{
-        mergeData('mobile',im);mergeData('tower',it);saveStore('mobile');saveStore('tower');
-        renderAll();closeModal('m-confirm');showToast(`已导入 ${total} 条记录`);
+      const total=PROJ_KEYS.reduce((s,k)=>s+arrs[k].length,0);
+      if(total===0){showToast('文件中没有有效数据');return}
+      const confRestored=!!(data.conf&&data.conf.mobile);
+      const desc=PROJ_KEYS.map(k=>PROJECTS[k].shortName+arrs[k].length+'条').join('/');
+      showConfirm('导入数据',`将导入 ${total} 条日报（${desc}），同日期将覆盖${confRestored?'，并恢复班组设置':''}，是否继续？`,()=>{
+        if(confRestored){try{localStorage.setItem(CONF_KEY,JSON.stringify(data.conf));loadConf()}catch(err){}}
+        PROJ_KEYS.forEach(k=>{mergeData(k,arrs[k]);saveStore(k)});
+        applyTheme();renderAll();closeModal('m-confirm');showToast(`已导入 ${total} 条记录`);
       });
     }catch(err){showToast('文件格式错误，无法导入')}
   };
@@ -882,7 +980,7 @@ function renderStats(){
   $('sm-count').textContent=sorted.length;
   $('stats-badge').textContent=`${y}年${m}月`;
   const th=PROJECTS[curProj].theme;
-  document.querySelectorAll('#tc-stats .si').forEach(el=>{el.classList.remove('t');if(th==='t')el.classList.add('t')});
+  document.querySelectorAll('#tc-stats .si').forEach(el=>{el.classList.remove('t','e');if(th!=='m')el.classList.add(th)});
   renderChart(sorted);
   renderAreaTable(sorted);
   $('chart-legend').innerHTML=`<div class="clegi"><div class="clegd" style="background:var(--primary)"></div>出工上报率</div><div class="clegi"><div class="clegd" style="background:var(--success)"></div>收工上报率</div><div class="clegi"><div class="clegd" style="background:var(--danger)"></div>高危上报率</div>`;
@@ -919,7 +1017,7 @@ function renderChart(data){
 }
 
 function renderAreaTable(data){
-  const tb=$('at-body'),areas=PROJECTS[curProj].highAreas;
+  const tb=$('at-body'),areas=getAreas(curProj);
   const stats={};areas.forEach(n=>stats[n]={total:0,reported:0,missing:0});
   data.forEach(r=>{
     if(r.highAreas&&Array.isArray(r.highAreas))r.highAreas.forEach(a=>{if(stats[a.name]){stats[a.name].total+=num(a.total);stats[a.name].reported+=num(a.reported);stats[a.name].missing+=num(a.missing)}});
@@ -934,12 +1032,12 @@ function renderAreaTable(data){
 
 function exportStatsReport(){
   const mv=$('stats-month').value;if(!mv){showToast('请先选择月份');return}
-  const[y,m]=mv.split('-').map(Number);const p=PROJECTS[curProj];
+  const[y,m]=mv.split('-').map(Number);const p=PROJECTS[curProj];const effAreas=getAreas(curProj);
   const reports=getReports().filter(r=>{const d=new Date(r.date+'T00:00:00');return d.getFullYear()===y&&(d.getMonth()+1)===m});
   const sorted=[...reports].sort((a,b)=>a.date.localeCompare(b.date));
   if(sorted.length===0){showToast(`${y}年${m}月暂无数据`);return}
   let ods=0,ors=0,oms=0,ids=0,irs=0,ims=0,hts=0,hrs=0,hms=0;
-  const aStats={};p.highAreas.forEach(n=>aStats[n]={total:0,reported:0,missing:0});
+  const aStats={};effAreas.forEach(n=>aStats[n]={total:0,reported:0,missing:0});
   sorted.forEach(r=>{
     ods+=num(r.outDispatch);ors+=num(r.outReported);oms+=num(r.outMissing);
     ids+=num(r.inDispatch);irs+=num(r.inReported);ims+=num(r.inMissing);
@@ -948,7 +1046,7 @@ function exportStatsReport(){
   });
   const oR=ods>0?((ors/ods)*100).toFixed(1)+'%':'--',iR=ids>0?((irs/ids)*100).toFixed(1)+'%':'--',hR=hts>0?((hrs/hts)*100).toFixed(1)+'%':'--';
   let text=`【${p.name}月度统计报表】\n统计月份：${y}年${m}月\n填报份数：${sorted.length} 份\n生成时间：${fmtDate(new Date())}\n\n${'='.repeat(40)}\n\n【三率汇总】\n出工上报率：${oR}（${ors}/${ods}）\n收工上报率：${iR}（${irs}/${ids}）\n高危上报率：${hR}（${hrs}/${hts}）\n\n${'='.repeat(40)}\n\n【月度汇总】\n总出工组数：${ods}\n总收工组数：${irs}\n总高危单数：${hts}\n\n${'='.repeat(40)}\n\n【未报统计】\n出工未报次数：${oms}\n收工未报次数：${ims}\n高危未报单数：${hms}\n\n${'='.repeat(40)}\n\n【高危工单 · 按区县统计】\n${'区县'.padEnd(10)}共(单)  已报   未报   上报率\n${'-'.repeat(38)}\n`;
-  p.highAreas.forEach(n=>{const s=aStats[n];const rate=s.total>0?((s.reported/s.total)*100).toFixed(1)+'%':'--';text+=`${n.padEnd(10)}${String(s.total).padStart(5)}   ${String(s.reported).padStart(4)}   ${String(s.missing).padStart(4)}   ${rate.padStart(6)}\n`});
+  effAreas.forEach(n=>{const s=aStats[n];const rate=s.total>0?((s.reported/s.total)*100).toFixed(1)+'%':'--';text+=`${n.padEnd(10)}${String(s.total).padStart(5)}   ${String(s.reported).padStart(4)}   ${String(s.missing).padStart(4)}   ${rate.padStart(6)}\n`});
   text+=`${'-'.repeat(38)}\n${'合计'.padEnd(10)}${String(hts).padStart(5)}   ${String(hrs).padStart(4)}   ${String(hms).padStart(4)}   ${hR.padStart(6)}\n`;
   $('pv-title').textContent=`月度统计报表 · ${y}年${m}月`;$('pv-body').textContent=text;window._pvText=text;openModal('m-preview');
 }
